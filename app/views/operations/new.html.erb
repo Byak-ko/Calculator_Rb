@@ -1,28 +1,27 @@
-<h1 class="font-bold text-xl mb-4 text-gray-600 text-center">Calculator</h1>
+<div class="container mx-auto mt-8">
+  <h1 class="font-bold text-xl mb-4 text-gray-600 text-center">Hotwire Calculator</h1>
 <%= turbo_frame_tag "form" do %>
-  <%= form_with model: @operation, url: operations_path, method: :post, html: { class: "grid grid-cols-4 gap-4 bg-cyan-50 border p-8" } do |f| %>
-    <div class="col-span-4 bg-gray-200 p-8 text-left font-bold text-lg mb-2 border border-gray-300 text-gray-500 drop-shadow-md">
-      <%= f.text_field :expression, class: 'text-field', readonly: true, value: @operation.expression || @operation.message %>
-    </div>
-    <input type="button" onclick="updateExpression('1')" value="1" class="button" />
-    <input type="button" onclick="updateExpression('2')" value="2" class="button" />
-    <input type="button" onclick="updateExpression('3')" value="3" class="button" />
-    <input type="button" onclick="updateExpression('+')" value="+" class="operator-button" />
-    <input type="button" onclick="updateExpression('4')" value="4" class="button" />
-    <input type="button" onclick="updateExpression('5')" value="5" class="button" />
-    <input type="button" onclick="updateExpression('6')" value="6" class="button" />
-    <input type="button" onclick="updateExpression('-')" value="-" class="operator-button" />
-    <input type="button" onclick="updateExpression('7')" value="7" class="button" />
-    <input type="button" onclick="updateExpression('8')" value="8" class="button" />
-    <input type="button" onclick="updateExpression('9')" value="9" class="button" />
-    <input type="button" onclick="updateExpression('*')" value="*" class="operator-button" />
-    <input type="button" onclick="updateExpression('0')" value="0" class="button" />
-    <input type="button" onclick="clearExpression()" value="Clear" class="button" />
-    <input type="button" onclick="updateExpression('/')" value="/" class="operator-button" />
-    <input type="button" onclick="updateExpression('.')" value="." class="button" />
-    <input type="button" onclick="calculateResult()" value="=" class="equal-button col-span-4" />
+  <%= form_for @operation, html: { class: "grid grid-cols-4 gap-4 bg-cyan-50 border p-8" } do |f| %>
+    <%= hidden_field_tag "operation[]", @operation.operand_one %>
+    <%= hidden_field_tag "operation[]", @operation.operation %>
+    <div class="col-span-4 bg-gray-200 p-8 text-right font-bold text-lg mb-2 border border-gray-300 text-gray-500 drop-shadow-md"><%= @operation.result || @operation.message %></div>
+    <input type="submit" name="operation[]" value="1" class="button" />
+    <input type="submit" name="operation[]" value="2" class="button" />
+    <input type="submit" name="operation[]" value="3" class="button" />
+    <input type="submit" name="operation[]" value="+" class="button" />
+    <input type="submit" name="operation[]" value="4" class="button" />
+    <input type="submit" name="operation[]" value="5" class="button" />
+    <input type="submit" name="operation[]" value="6" class="button" />
+    <input type="submit" name="operation[]" value="-" class="button" />
+    <input type="submit" name="operation[]" value="7" class="button" />
+    <input type="submit" name="operation[]" value="8" class="button" />
+    <input type="submit" name="operation[]" value="9" class="button" />
+    <input type="submit" name="operation[]" value="*" class="button" />
+    <input type="submit" name="operation[]" value="0" class="button col-span-3" />
+    <input type="submit" name="operation[]" value="=" class="button" />
   <% end %>
 <% end %>
+</div>
 
 <style>
   .button,
@@ -30,6 +29,9 @@
   .equal-button {
     border: 2px solid #ccc;
     border-radius: 5px;
+    padding: 10px 15px;
+    font-size: 16px;
+    cursor: pointer;
   }
 
   .button:active,
@@ -49,25 +51,7 @@
   .text-field {
     width: 100%;
     text-align: left;
+    padding: 10px;
+    font-size: 16px;
   }
 </style>
-
-<script>
-  function updateExpression(value) {
-    var expressionField = document.querySelector('input[name="operation[expression]"]');
-    expressionField.value += value;
-    expressionField.dispatchEvent(new Event('input'));
-  }
-
-  function clearExpression() {
-    var expressionField = document.querySelector('input[name="operation[expression]"]');
-    expressionField.value = '';
-    expressionField.dispatchEvent(new Event('input'));
-  }
-
-  function calculateResult() {
-    var expressionField = document.querySelector('input[name="operation[expression]"]');
-    var resultField = document.querySelector('.text-field');
-    resultField.value = eval(expressionField.value);
-  }
-</script>
